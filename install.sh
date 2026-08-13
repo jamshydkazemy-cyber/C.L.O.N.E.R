@@ -9,7 +9,7 @@ SUCCESS_TOOLS=()
 install_tool() {
     local tool_name=$1
     echo "----------------------------------------"
-    echo "📦 Installing $tool_name..."
+    echo "📦 Installing $tool_name...."
     echo "----------------------------------------"
     
     # اجرای دستور نصب و هدایت خطاهای احتمالی به فایل لوگ
