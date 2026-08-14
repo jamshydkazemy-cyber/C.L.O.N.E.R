@@ -34,6 +34,7 @@ for tool in "${TOOLS[@]}"; do
     install_tool "$tool"
 done
 
+sudo subfinder --update
 
 echo "----------------------------------------"
 echo "📦 Installing waybackurls ...."

@@ -3,6 +3,7 @@
 echo "enter the main domain :"
 read domain
 
+
 directory=${domain}_recon
 echo "creating directory $directory"
 mkdir $directory
@@ -12,10 +13,10 @@ amass_scan()
 {
     mkdir -p amass
     echo "[*] Running Amass Passive..."
-    amass enum -passive -d $domain -o amass/amass.txt 
+    amass enum -passive -d $domain > amass/amass.txt 
     sleep 0.25
     echo "[*] Running Amass active..."
-    amass enum -active -d $domain -o amass/amass-active.txt 
+    amass enum -active -d $domain > amass/amass-active.txt 
     sort -u amass/amass.txt amass/amass-active.txt -o amass/amass-unique.txt 
     echo "The results of amass scan are stored in $directory/amass/."
 }
@@ -52,6 +53,16 @@ whois_scan()
 {
     mkdir -p whois
     echo "[*] Running WHOIS..."
-    whois $domain -o whois/whois.txt 2>&1
+    whois $domain > whois/whois.txt 2>&1
     echo "[+] WHOIS results stored in $directory/whois/"
 }
+
+amass_scan
+subfinder_scan
+crt_scan
+waybackurls_scan
+whois_scan
+
+echo
+echo "✅ All scans completed successfully!"
+echo "Results are in: $(pwd)"
