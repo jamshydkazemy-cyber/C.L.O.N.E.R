@@ -27,13 +27,21 @@ echo "🚀 Starting the installation process..."
 echo ""
 
 # لیست ابزارهای شما برای نصب
-TOOLS=("amass" "subfinder" "whois" "nmap" "gobuster" "ffuf" "nuclei")
+TOOLS=("amass" "subfinder" "whois" "nmap" "gobuster" "ffuf" "nuclei" "assetfinder" "jq")
 
 # حلقه برای نصب تک‌تک ابزارها
 for tool in "${TOOLS[@]}"; do
     install_tool "$tool"
 done
 
+
+echo "----------------------------------------"
+echo "📦 Installing waybackurls ...."
+echo "----------------------------------------"
+# برای نصب ابزار waybackurl
+sudo apt install golang-go
+go install github.com/tomnomnom/waybackurls@latest
+export PATH="$PATH:$(go env GOPATH)/bin"
 
 echo "========================================"
 echo "📊 INSTALLATION SUMMARY"
@@ -45,6 +53,7 @@ if [ ${#SUCCESS_TOOLS[@]} -gt 0 ]; then
     for tool in "${SUCCESS_TOOLS[@]}"; do
         echo "   - $tool"
     done
+    echo "   - waybackurls"
     echo ""
 fi
 
