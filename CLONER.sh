@@ -58,11 +58,40 @@ whois_scan()
     echo "[+] WHOIS results stored in $directory/whois/"
 }
 
+extract_and_nmap_scan() {
+    mkdir -p external_domains
+    mkdir -p nmap_results
+
+    echo "[*] Extracting unique root domains from previous scans..."
+
+    cat subfinder/subfinder.txt crt/ctr.txt waybackurls/wayback.txt 2>/dev/null | \
+    grep -oE '([a-zA-Z0-9-]+\.)+[a-zA-Z]{2,}' | \
+    awk -F. '{if (NF>1) print $(NF-1)"."$NF}' | \
+    sort -u > external_domains/unique_domains.txt
+
+    echo "[+] Found unique domains:"
+    cat external_domains/unique_domains.txt
+
+    echo "[*] Starting Nmap scan on each unique domain..."
+
+
+    while read -r ext_domain; do
+        if [ -n "$ext_domain" ]; then
+            echo "[*] Running Nmap on: $ext_domain"
+            nmap -sV -F "$ext_domain" -oN "nmap_results/nmap_${ext_domain}.txt"
+        fi
+    done < external_domains/unique_domains.txt
+
+    echo "[+] All Nmap scans completed. Results stored in $directory/nmap_results/"
+    sleep 0.25
+}
+
 amass_scan
 subfinder_scan
 crt_scan
 waybackurls_scan
 whois_scan
+extract_and_nmap_scan
 
 echo
 echo "✅ All scans completed successfully!"
