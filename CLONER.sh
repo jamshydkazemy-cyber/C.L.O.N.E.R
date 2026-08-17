@@ -9,6 +9,7 @@ echo "creating directory $directory"
 mkdir $directory
 cd "$directory" || exit
 
+
 amass_scan()
 {
     mkdir -p amass
